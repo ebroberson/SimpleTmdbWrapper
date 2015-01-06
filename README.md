@@ -1,4 +1,4 @@
 SimpleTmdbWrapper
 =================
 
-A simple Tmdb API wrapper written in C# with .NET 4.5
+A simple TMDB API wrapper written in C#.NET with .NET 4.5
