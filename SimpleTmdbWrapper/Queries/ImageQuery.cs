@@ -18,28 +18,28 @@ namespace SimpleTmdbWrapper.Queries
         public static readonly string DefaultSize = "original";
         public static readonly ImageType DefaultImageType = ImageType.Poster;
 
-        public ImageQuery()
+        public ImageQuery(TmdbConfigProvider configProvider)
         {
         }
 
-        public ImageQuery(Tmdb.ImageConfig imageConfig, Tmdb.Movie movie)
-            : this(imageConfig, movie, DefaultImageType)
+        public ImageQuery(TmdbConfigProvider configProvider, Tmdb.ImageConfig imageConfig, Tmdb.Movie movie)
+            : this(configProvider, imageConfig, movie, DefaultImageType)
         {
         }
 
-        public ImageQuery(Tmdb.Configuration config, Tmdb.Movie movie)
-            : this(config.Images, movie, DefaultImageType)
+        public ImageQuery(TmdbConfigProvider configProvider, Tmdb.Configuration config, Tmdb.Movie movie)
+            : this(configProvider, config.Images, movie, DefaultImageType)
         {
         }
 
-        public ImageQuery(Tmdb.Configuration config, Tmdb.Movie movie, ImageType imageType)
-            : this(config.Images, movie, imageType)
+        public ImageQuery(TmdbConfigProvider configProvider, Tmdb.Configuration config, Tmdb.Movie movie, ImageType imageType)
+            : this(configProvider, config.Images, movie, imageType)
         {
         }
 
-        public ImageQuery(Tmdb.ImageConfig imageConfig, Tmdb.Movie movie, ImageType imageType)
-            : this()
+        public ImageQuery(TmdbConfigProvider configProvider, Tmdb.ImageConfig imageConfig, Tmdb.Movie movie, ImageType imageType)
         {
+            ConfigProvider = configProvider;
             ImageConfig = imageConfig;
             Movie = movie;
             ImageType = imageType;

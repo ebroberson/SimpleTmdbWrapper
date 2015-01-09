@@ -4,18 +4,19 @@ namespace SimpleTmdbWrapper.Queries
 {
     public sealed class ConfigurationQuery : Query<Tmdb.Configuration>
     {
-        public ConfigurationQuery()
+        public ConfigurationQuery(TmdbConfigProvider configProvider)
         {
             ApiMethod = "configuration";
+            ConfigProvider = configProvider;
         }
 
         protected override string BuildRequestUrl()
         {
             var result = string.Format("{0}/{1}/{2}?{3}",
-                                        UrlStart,   // {0}
-                                        ApiVersion, // {1}  
+                                        ConfigProvider.ApiUrl,   // {0}
+                                        ConfigProvider.ApiVersion, // {1}  
                                         ApiMethod,  // {2}
-                                        ApiKey);    // {3}
+                                        ConfigProvider.ApiKey);    // {3}
             return result;
         }
     }

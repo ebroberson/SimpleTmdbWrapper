@@ -9,10 +9,11 @@ namespace SimpleTmdbWrapper.Queries
     {
         public MovieAddons Addons { get; private set; }
 
-        public MovieQuery()
+        public MovieQuery(TmdbConfigProvider configProvider)
         {
             ApiMethod = "movie";
             Addons = MovieAddons.None;
+            ConfigProvider = configProvider;
         }
         
         /// <summary>

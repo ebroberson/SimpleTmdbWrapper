@@ -13,9 +13,15 @@ namespace SimpleTmdbWrapper.Queries
 {
     public abstract class Query
     {
-        protected static readonly string ApiKey = ConfigurationManager.AppSettings["ApiKey"];
-        protected static readonly int ApiVersion = Convert.ToInt32(ConfigurationManager.AppSettings["ApiVersion"]);
-        protected static readonly string UrlStart = ConfigurationManager.AppSettings["ApiUrl"];
+        //protected static readonly string ApiKey = ConfigurationManager.AppSettings["ApiKey"];
+        //protected static readonly int ApiVersion = Convert.ToInt32(ConfigurationManager.AppSettings["ApiVersion"]);
+        //protected static readonly string UrlStart = ConfigurationManager.AppSettings["ApiUrl"];
+
+        protected TmdbConfigProvider ConfigProvider
+        {
+            get;
+            set;
+        }
 
         protected string ApiMethod
         {
@@ -174,12 +180,12 @@ namespace SimpleTmdbWrapper.Queries
             }
 
             var result = string.Format("{0}/{1}/{2}{3}{4}{5}",
-                                        UrlStart,   // {0}
-                                        ApiVersion, // {1}  
+                                        ConfigProvider.ApiUrl,   // {0}
+                                        ConfigProvider.ApiVersion, // {1}  
                                         Method,  // {2}
                                         HttpUtility.UrlEncode(Arguments),  // {3}
                                         HasAddons ? QueryAddons + "&" : IsSearch ? "&" : "?", // {4}
-                                        ApiKey);    // {5}
+                                        ConfigProvider.ApiKey);    // {5}
             return result;
         }
 
