@@ -60,6 +60,7 @@
     <Compile Include="Queries\MovieQuery.cs" />
     <Compile Include="Queries\PersonQuery.cs" />
     <Compile Include="Queries\QueryBase.cs" />
+    <Compile Include="TmdbConfigProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
