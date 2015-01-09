@@ -17,14 +17,53 @@ namespace SimpleTmdbWrapper.Queries
         protected static readonly int ApiVersion = Convert.ToInt32(ConfigurationManager.AppSettings["ApiVersion"]);
         protected static readonly string UrlStart = ConfigurationManager.AppSettings["ApiUrl"];
 
-        protected virtual string Arguments { get; set; }
-        protected virtual string ApiMethod { get; set; }
-        protected virtual string SearchMethod { get { return string.Format("{0}/{1}?query=", "search", ApiMethod); } }
-        protected virtual string QueryAddons { get; set; }
-        protected virtual bool HasAddons { get { return !string.IsNullOrEmpty(QueryAddons); } }
+        protected string ApiMethod
+        {
+            get;
+            set;
+        }
 
-        public virtual bool IsSearch { get; protected set; }
-        public virtual string Method { get { return IsSearch ? SearchMethod : ApiMethod + "/"; } }
+        protected virtual string Arguments
+        {
+            get;
+            set;
+        }
+
+        protected virtual string SearchMethod
+        {
+            get
+            {
+                return string.Format("{0}/{1}?query=", "search", ApiMethod);
+            }
+        }
+
+        protected virtual string QueryAddons
+        {
+            get;
+            set;
+        }
+
+        protected virtual bool HasAddons
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(QueryAddons);
+            }
+        }
+
+        public virtual bool IsSearch
+        {
+            get;
+            protected set;
+        }
+
+        public virtual string Method
+        {
+            get
+            {
+                return IsSearch ? SearchMethod : ApiMethod + "/";
+            }
+        }
 
         private IEnumerable<CultureInfo> supportedLanguages = CultureInfo.GetCultures(CultureTypes.NeutralCultures);
         public virtual IEnumerable<CultureInfo> SupportedLanguages
@@ -110,7 +149,7 @@ namespace SimpleTmdbWrapper.Queries
                 {
                     using (var reader = new System.IO.StreamReader(response.GetResponseStream()))
                     {
-                        result = await JsonConvert.DeserializeObjectAsync<TResult>(reader.ReadToEnd());
+                        result = await Task.Factory.StartNew<TResult>(() => JsonConvert.DeserializeObject<TResult>(reader.ReadToEnd()));
                     }
                 }
             }
