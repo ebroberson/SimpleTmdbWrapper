@@ -9,8 +9,6 @@ namespace SimpleTmdbWrapper.Queries
     {
         public MovieAddons Addons { get; private set; }
 
-        public string Language { get; set; }
-
         public MovieQuery()
         {
             ApiMethod = "movie";
