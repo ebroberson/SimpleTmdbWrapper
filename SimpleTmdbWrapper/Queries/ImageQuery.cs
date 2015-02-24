@@ -5,7 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using Tmdb =SimpleTmdbWrapper.Models;
+using NLog;
+using Tmdb = SimpleTmdbWrapper.Models;
 
 namespace SimpleTmdbWrapper.Queries
 {
