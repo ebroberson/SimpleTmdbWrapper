@@ -7,12 +7,15 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
+using NLog;
 using Tmdb = SimpleTmdbWrapper.Models;
 
 namespace SimpleTmdbWrapper.Queries
 {
     public abstract class Query
     {
+        private Logger _log = LogManager.GetCurrentClassLogger();
+
         protected TmdbConfigProvider ConfigProvider
         {
             get;
@@ -112,6 +115,8 @@ namespace SimpleTmdbWrapper.Queries
             request.Accept = "application/json";
             request.ContentLength = 0;
 
+            _log.Debug(string.Format("Request created: {0}", url));
+
             using (var response = request.GetResponse())
             {
                 using (var reader = new System.IO.StreamReader(response.GetResponseStream()))
@@ -133,6 +138,8 @@ namespace SimpleTmdbWrapper.Queries
             request.Method = "GET";
             request.Accept = "application/json";
             request.ContentLength = 0;
+
+            _log.Debug(string.Format("Request created: {0}", url));
 
             await ConfigProvider.RateLimiter.LimitAsync(Task.Run(async () =>
                 {

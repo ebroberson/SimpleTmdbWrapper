@@ -5,11 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using NLog;
 
 namespace SimpleTmdbWrapper.Limiters
 {
     public sealed class PerSecondRateLimiter : IRateLimiter
     {
+        private readonly Logger _log = LogManager.GetCurrentClassLogger();
         public static readonly IRateLimiter Default = new PerSecondRateLimiter(30, TimeSpan.FromSeconds(10D));
         
         private readonly SemaphoreSlim _semaphore;
@@ -67,8 +69,10 @@ namespace SimpleTmdbWrapper.Limiters
 
             if (allowedToWork)
             {
+                _log.Debug("Entering semaphore.");
                 CurrentBatchStart = DateTime.UtcNow;
                 await task;
+                _log.Debug("Exiting semaphore.");
             }
         }
     }
