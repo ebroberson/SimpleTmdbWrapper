@@ -1,7 +1,7 @@
 ﻿
 using System;
 using System.ComponentModel;
-using Tmdb =SimpleTmdbWrapper.Models;
+using Tmdb = SimpleTmdbWrapper.Models;
 
 namespace SimpleTmdbWrapper.Queries
 {
