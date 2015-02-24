@@ -13,10 +13,6 @@ namespace SimpleTmdbWrapper.Queries
 {
     public abstract class Query
     {
-        //protected static readonly string ApiKey = ConfigurationManager.AppSettings["ApiKey"];
-        //protected static readonly int ApiVersion = Convert.ToInt32(ConfigurationManager.AppSettings["ApiVersion"]);
-        //protected static readonly string UrlStart = ConfigurationManager.AppSettings["ApiUrl"];
-
         protected TmdbConfigProvider ConfigProvider
         {
             get;
@@ -116,23 +112,12 @@ namespace SimpleTmdbWrapper.Queries
             request.Accept = "application/json";
             request.ContentLength = 0;
 
-            try
+            using (var response = request.GetResponse())
             {
-                using (var response = request.GetResponse())
+                using (var reader = new System.IO.StreamReader(response.GetResponseStream()))
                 {
-                    using (var reader = new System.IO.StreamReader(response.GetResponseStream()))
-                    {
-                        result = JsonConvert.DeserializeObject<TResult>(reader.ReadToEnd());
-                    }
+                    result = JsonConvert.DeserializeObject<TResult>(reader.ReadToEnd());
                 }
-            }
-            catch (WebException e)
-            {
-                // TODO: something meaningful
-            }
-            catch (Exception ex)
-            {
-                // TODO: Log and move on...
             }
 
             Reset();
@@ -149,24 +134,17 @@ namespace SimpleTmdbWrapper.Queries
             request.Accept = "application/json";
             request.ContentLength = 0;
 
-            try
-            {
-                using (var response = await request.GetResponseAsync())
+            await ConfigProvider.RateLimiter.LimitAsync(Task.Run(async () =>
                 {
-                    using (var reader = new System.IO.StreamReader(response.GetResponseStream()))
+                    using (var response = await request.GetResponseAsync())
                     {
-                        result = await Task.Factory.StartNew<TResult>(() => JsonConvert.DeserializeObject<TResult>(reader.ReadToEnd()));
+                        using (var reader = new System.IO.StreamReader(response.GetResponseStream()))
+                        {
+                            result = await Task.Run<TResult>(() => JsonConvert.DeserializeObject<TResult>(reader.ReadToEnd()));
+                        }
                     }
-                }
-            }
-            catch (WebException e)
-            {
-                // TODO: something meaningful
-            }
-            catch (Exception ex)
-            {
-                // TODO: Log and move on...
-            }
+                })
+                );
 
             Reset();
             return result;

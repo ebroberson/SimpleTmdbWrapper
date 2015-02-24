@@ -80,23 +80,11 @@ namespace SimpleTmdbWrapper.Queries
             Stream result = null;
             var url = BuildRequestUrl();
             var request = WebRequest.Create(url) as HttpWebRequest;
+            var response = await request.GetResponseAsync();
 
-            try
-            {
-                var response = await request.GetResponseAsync();
-                result = response.GetResponseStream();
-                //response.Dispose();
-            }
-            catch (WebException e)
-            {
-                // TODO: something meaningful
-            }
-            catch (Exception ex)
-            {
-                // TODO: Log and move on...
-            }
-
+            result = response.GetResponseStream();
             Reset();
+
             return result;
         }
 
