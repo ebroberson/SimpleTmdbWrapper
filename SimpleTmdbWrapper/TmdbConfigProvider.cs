@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace SimpleTmdbWrapper
 {
     /// <summary>
-    /// Represents a way to get TMDB URL config settings
+    /// Represents a way to get TMDB URL config and rate limiting settings
     /// </summary>
     public abstract class TmdbConfigProvider
     {
@@ -22,6 +22,11 @@ namespace SimpleTmdbWrapper
         }
 
         public abstract string ApiUrl
+        {
+            get;
+        }
+
+        public abstract Limiters.IRateLimiter RateLimiter
         {
             get;
         }

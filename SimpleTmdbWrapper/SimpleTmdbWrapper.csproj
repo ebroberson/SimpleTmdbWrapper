@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
+    <Compile Include="Limiters\PerSecondRateLimiter.cs" />
     <Compile Include="Models\Company.cs" />
     <Compile Include="Models\Configuration.cs" />
     <Compile Include="Models\Country.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="Queries\MovieQuery.cs" />
     <Compile Include="Queries\PersonQuery.cs" />
     <Compile Include="Queries\QueryBase.cs" />
+    <Compile Include="Limiters\IRateLimiter.cs" />
     <Compile Include="TmdbConfigProvider.cs" />
   </ItemGroup>
   <ItemGroup>
