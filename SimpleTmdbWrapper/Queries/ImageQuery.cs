@@ -11,7 +11,13 @@ namespace SimpleTmdbWrapper.Queries
 {
     public class ImageQuery : Query
     {
-        public Tmdb.ImageConfig ImageConfig { get; set; }
+        private Logger _log = LogManager.GetCurrentClassLogger();
+
+        public Tmdb.ImageConfig ImageConfig
+        {
+            get;
+            set;
+        }
         public Tmdb.Movie Movie { get; set; }
         public ImageType ImageType { get; set; }
 
@@ -81,6 +87,8 @@ namespace SimpleTmdbWrapper.Queries
             var url = BuildRequestUrl();
             var request = WebRequest.Create(url) as HttpWebRequest;
             var response = await request.GetResponseAsync();
+
+            _log.Debug(string.Format("Request created: {0}", url));
 
             result = response.GetResponseStream();
             Reset();
