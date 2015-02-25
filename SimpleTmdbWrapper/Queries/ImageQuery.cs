@@ -85,13 +85,18 @@ namespace SimpleTmdbWrapper.Queries
         public async Task<Stream> ExecuteAsync()
         {
             Stream result = null;
+            _log.Debug("Building request url.");
             var url = BuildRequestUrl();
+            _log.Debug("Request url built. Creating HttpWebRequest.");
             var request = WebRequest.Create(url) as HttpWebRequest;
+            _log.Debug("Request object built. Retrieving WebResponse.");
             var response = await request.GetResponseAsync();
 
             _log.Debug(string.Format("Request created: {0}", url));
 
+            _log.Debug("Retrieving response Stream.");
             result = response.GetResponseStream();
+            _log.Debug("Resetting.");
             Reset();
 
             return result;
