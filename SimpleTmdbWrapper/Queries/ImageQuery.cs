@@ -90,7 +90,7 @@ namespace SimpleTmdbWrapper.Queries
             _log.Debug("Request url built. Creating HttpWebRequest.");
             var request = WebRequest.Create(url) as HttpWebRequest;
             _log.Debug("Request object built. Retrieving WebResponse.");
-            var response = await request.GetResponseAsync();
+            var response = await request.GetResponseAsync().ConfigureAwait(false);
 
             _log.Debug(string.Format("Request created: {0}", url));
 

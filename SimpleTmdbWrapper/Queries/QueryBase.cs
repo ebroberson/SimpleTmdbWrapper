@@ -144,15 +144,15 @@ namespace SimpleTmdbWrapper.Queries
             await Task.Run(() =>
                 ConfigProvider.RateLimiter.Limit(Task.Run(async () =>
                     {
-                        using (var response = await request.GetResponseAsync())
+                        using (var response = await request.GetResponseAsync().ConfigureAwait(false))
                         {
                             using (var reader = new System.IO.StreamReader(response.GetResponseStream()))
                             {
-                                result = await Task.Run<TResult>(() => JsonConvert.DeserializeObject<TResult>(reader.ReadToEnd()));
+                                result = await Task.Run<TResult>(() => JsonConvert.DeserializeObject<TResult>(reader.ReadToEnd())).ConfigureAwait(false);
                             }
                         }
                     })
-                ));
+                )).ConfigureAwait(false);
 
             Reset();
             return result;
@@ -215,7 +215,7 @@ namespace SimpleTmdbWrapper.Queries
             Arguments = query;
             QueryAddons = string.Empty;
 
-            var result = await ExecuteAsync<Tmdb.SearchResult<T>>();
+            var result = await ExecuteAsync<Tmdb.SearchResult<T>>().ConfigureAwait(false);
             return result;
         }
 
@@ -228,7 +228,7 @@ namespace SimpleTmdbWrapper.Queries
         public virtual async Task<T> ExecuteAsync()
         {
             IsSearch = false;
-            return await ExecuteAsync<T>();
+            return await ExecuteAsync<T>().ConfigureAwait(false);
         }
 
         public virtual Query<T> With(Enum addons)
