@@ -63,17 +63,20 @@ namespace SimpleTmdbWrapper.Limiters
             _semaphore = new SemaphoreSlim(1, Requests);
         }
 
-        public async Task LimitAsync(Task task)
+        public bool Limit(Task task)
         {
-            var allowedToWork = await _semaphore.WaitAsync((int)Period.TotalMilliseconds);
+            var allowedToWork = _semaphore.Wait((int)Period.TotalMilliseconds);
 
             if (allowedToWork)
             {
                 _log.Debug("Entering semaphore.");
                 CurrentBatchStart = DateTime.UtcNow;
-                await task;
+                task.ContinueWith((cont) => _semaphore.Release());
+                _semaphore.Release();
                 _log.Debug("Exiting semaphore.");
             }
+
+            return allowedToWork;
         }
     }
 }

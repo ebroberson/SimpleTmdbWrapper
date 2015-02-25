@@ -10,6 +10,6 @@ namespace SimpleTmdbWrapper.Limiters
 {
     public interface IRateLimiter
     {
-        Task LimitAsync(Task task);
+        bool Limit(Task task);
     }
 }
