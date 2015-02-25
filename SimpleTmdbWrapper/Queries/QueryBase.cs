@@ -141,18 +141,17 @@ namespace SimpleTmdbWrapper.Queries
 
             _log.Debug(string.Format("Request created: {0}", url));
 
-            await Task.Run(() =>
-                ConfigProvider.RateLimiter.Limit(Task.Run(async () =>
+            ConfigProvider.RateLimiter.LimitAsync(Task.Run(async () =>
+                {
+                    using (var response = await request.GetResponseAsync().ConfigureAwait(false))
                     {
-                        using (var response = await request.GetResponseAsync().ConfigureAwait(false))
+                        using (var reader = new System.IO.StreamReader(response.GetResponseStream()))
                         {
-                            using (var reader = new System.IO.StreamReader(response.GetResponseStream()))
-                            {
-                                result = await Task.Run<TResult>(() => JsonConvert.DeserializeObject<TResult>(reader.ReadToEnd())).ConfigureAwait(false);
-                            }
+                            result = await Task.Run<TResult>(() => JsonConvert.DeserializeObject<TResult>(reader.ReadToEnd())).ConfigureAwait(false);
                         }
-                    })
-                )).ConfigureAwait(false);
+                    }
+                })
+            ).ConfigureAwait(false);
 
             Reset();
             return result;
