@@ -12,11 +12,7 @@ namespace SimpleTmdbWrapper.Queries
 
         protected override string BuildRequestUrl()
         {
-            var result = string.Format("{0}/{1}/{2}?{3}",
-                                        ConfigProvider.ApiUrl,   // {0}
-                                        ConfigProvider.ApiVersion, // {1}  
-                                        ApiMethod,  // {2}
-                                        ConfigProvider.ApiKey);    // {3}
+            var result = $"{ConfigProvider.Url}/{ConfigProvider.Version}/{ApiMethod}{ConfigProvider.Key}";
             return result;
         }
     }

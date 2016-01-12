@@ -19,8 +19,16 @@ namespace SimpleTmdbWrapper.Queries
             get;
             set;
         }
-        public Tmdb.Movie Movie { get; set; }
-        public ImageType ImageType { get; set; }
+        public Tmdb.Movie Movie
+        {
+            get;
+            set;
+        }
+        public ImageType ImageType
+        {
+            get;
+            set;
+        }
 
         public static readonly string DefaultSize = "original";
         public static readonly ImageType DefaultImageType = ImageType.Poster;
@@ -69,12 +77,8 @@ namespace SimpleTmdbWrapper.Queries
 
         protected string BuildRequestUrl(bool secure, string size, ImageType type)
         {
-            var result = string.Format("{0}{1}{2}",
-                                        secure ? ImageConfig.SecureBaseUrl : ImageConfig.BaseUrl,
-                                        size,
-                                        GetPath(type)
-                                      );
-
+            var baseUrl = secure ? ImageConfig.SecureBaseUrl : ImageConfig.BaseUrl;
+            var result = $"{baseUrl}{size}{GetPath(type)}";
             return result;
         }
 
@@ -82,7 +86,7 @@ namespace SimpleTmdbWrapper.Queries
         /// This returns a Stream, so make sure to Dispose of it!
         /// </summary>
         /// <returns></returns>
-        public async Task<Stream> ExecuteAsync()
+        public Stream Execute()
         {
             Stream result = null;
             _log.Debug("Building request url.");
@@ -90,12 +94,19 @@ namespace SimpleTmdbWrapper.Queries
             _log.Debug("Request url built. Creating HttpWebRequest.");
             var request = WebRequest.Create(url) as HttpWebRequest;
             _log.Debug("Request object built. Retrieving WebResponse.");
-            var response = await request.GetResponseAsync().ConfigureAwait(false);
 
-            _log.Debug(string.Format("Request created: {0}", url));
+             ConfigProvider.RateLimiter.Limit(
+                new Task( () =>
+                {
+                    var response =  request.GetResponse();
 
-            _log.Debug("Retrieving response Stream.");
-            result = response.GetResponseStream();
+                    _log.Debug($"Request created: {url}");
+
+                    _log.Debug("Retrieving response Stream.");
+                    result = response.GetResponseStream();
+                })
+            );
+
             _log.Debug("Resetting.");
             Reset();
 

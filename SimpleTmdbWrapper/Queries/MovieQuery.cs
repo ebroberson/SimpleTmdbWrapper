@@ -35,7 +35,7 @@ namespace SimpleTmdbWrapper.Queries
             switch (type)
             {
                 case MovieIdType.NONE:
-                    throw new ArgumentException("Invalid MovieIdType specified.", "type");
+                    throw new ArgumentException("Invalid MovieIdType specified.", nameof(type));
                 case MovieIdType.IMDB:
                     throw new NotImplementedException();
                 case MovieIdType.TMDB:
@@ -78,29 +78,29 @@ namespace SimpleTmdbWrapper.Queries
     public enum MovieAddons
     {
         [Description("none")]
-		None = 0,
+        None = 0,
         [Description("alternative_titles")]
-		AlternativeTitles = 1,
+        AlternativeTitles = 1,
         [Description("changes")]
-		Changes = 2,
+        Changes = 2,
         [Description("images")]
-		Images = 4,
+        Images = 4,
         [Description("credits")]
-		Credits = 8,
+        Credits = 8,
         [Description("keywords")]
-		Keywords = 16,
+        Keywords = 16,
         [Description("releases")]
-		Releases = 32,
+        Releases = 32,
         [Description("videos")]
-		Videos = 64,
+        Videos = 64,
         [Description("translations")]
-		Translations = 128,
+        Translations = 128,
         [Description("similar")]
-		SimliarMovies = 256,
+        SimliarMovies = 256,
         [Description("reviews")]
-		Reviews = 512,
+        Reviews = 512,
         [Description("lists")]
-		Lists = 1024//,
+        Lists = 1024//,
         //[Description("latest")]
         //Latest = 2048,
         //[Description("upcoming")]

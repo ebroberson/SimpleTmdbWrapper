@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
-using Tmdb =SimpleTmdbWrapper.Models;
+using Tmdb = SimpleTmdbWrapper.Models;
 
 namespace SimpleTmdbWrapper.Queries
 {
@@ -13,7 +13,7 @@ namespace SimpleTmdbWrapper.Queries
 
         public PersonQuery GetPerson(long id)
         {
-            Arguments = string.Format("{0}/{1}", ApiMethod, id);
+            Arguments = $"{ApiMethod}/{id}";
             return this;
         }
     }
