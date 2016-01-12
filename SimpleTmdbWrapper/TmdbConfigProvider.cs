@@ -3,32 +3,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SimpleTmdbWrapper.Limiters;
 
 namespace SimpleTmdbWrapper
 {
     /// <summary>
     /// Represents a way to get TMDB URL config and rate limiting settings
     /// </summary>
-    public abstract class TmdbConfigProvider
+    public class TmdbConfigProvider
     {
-        public abstract string ApiVersion
+        public string Version { get; private set; }
+
+        public string Key { get; private set; }
+
+        public string Url { get; private set; }
+
+        public IRateLimiter RateLimiter { get; private set; }
+        
+        public TmdbConfigProvider(string url, string version, string key)
+            : this(url, version, key, TimeSpanRateLimiter.Default)
         {
-            get;
         }
 
-        public abstract string ApiKey
+        public TmdbConfigProvider(string url, string version, string key, IRateLimiter rateLimiter)
         {
-            get;
-        }
-
-        public abstract string ApiUrl
-        {
-            get;
-        }
-
-        public abstract Limiters.IRateLimiter RateLimiter
-        {
-            get;
+            Url = url;
+            Version = version;
+            Key = key;
+            RateLimiter = rateLimiter;
         }
     }
 }
